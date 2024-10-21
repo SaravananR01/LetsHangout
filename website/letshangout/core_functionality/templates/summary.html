@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}
+Summary
+{% endblock %}
+
+{% block body %}
+    <div class="flex flex-col items-center justify-center h-screen bg-gray-100 p-4">
+        <!-- Box for Event Name and Unique Code -->
+        <div class="bg-[#E85A4F] text-white p-6 rounded-lg shadow-md mb-6 max-w-3xl w-full mx-auto ml-32">  <!-- Added ml-4 for left margin -->
+            <h1 class="text-3xl font-bold mb-4 text-left">Summary</h1>
+            <h2 class="text-xl font-semibold mb-2 text-left">Event Name:</h2>
+            <p class="mb-4 text-left">...</p>  <!-- Replace with actual event name -->
+            <h2 class="text-xl font-semibold text-left">Unique Code:</h2>
+            <p class="mb-0 text-left">...</p>  <!-- Replace with actual unique code -->
+        </div>
+
+        <!-- Box for Summary and User Data -->
+        <div class="bg-white border border-gray-300 p-6 rounded-lg shadow-md max-w-3xl w-full mx-auto mr-32">  <!-- Added mr-4 for right margin -->
+            <h2 class="text-2xl font-semibold mb-4 text-right">Summary</h2>
+            <div class="bg-gray-100 border border-gray-200 p-4 rounded-md mb-4 text-right">
+                <p>...</p>  <!-- Replace with actual summary -->
+            </div>
+
+            <h2 class="text-2xl font-semibold mb-4 text-right">User Data</h2>
+            <div class="bg-gray-100 border border-gray-200 p-4 rounded-md text-right">
+                <h3 class="font-semibold">User 1</h3>
+                <p>...</p>  <!-- Replace with user 1 data -->
+                <h3 class="font-semibold">User 2</h3>
+                <p>...</p>  <!-- Replace with user 2 data -->
+                <h3 class="font-semibold">User 3</h3>
+                <p>...</p>  <!-- Replace with user 3 data -->
+                <!-- Add more users as needed -->
+            </div>
+        </div>
+    </div>
+{% endblock %}

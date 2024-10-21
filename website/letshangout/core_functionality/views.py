@@ -34,6 +34,10 @@ def howtouse(request):
     context={}
     return render(request,"howtouse.html",context)
 
+def summary(request,code):
+    context={}
+    return render(request,"summary.html",context)
+
 def newcode(request):
     context={}
     if request.method=="POST":

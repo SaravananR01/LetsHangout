@@ -8,5 +8,6 @@ urlpatterns = [
     path("entercode/", views.entercode, name="entercode"),
     path("", views.home, name="home"),
     path("howtouse/",views.howtouse,name="howtouse"),
-    path("newcode/",views.newcode,name="newcode")
+    path("newcode/",views.newcode,name="newcode"),
+    path("summary/<str:code>",views.summary,name="summary"),
 ]
