@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate New Code</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .error {
+            color: red;
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <div class="max-w-md mx-auto mt-10 p-4 bg-white shadow-md rounded-lg mb-4">
+        <h2 class="text-2xl font-bold text-center text-gray-800 mb-4">Generate New Code</h2>
+
+        <p id="error-message" class="error"></p>
+
+        <form id="code-form">
+            <div class="mb-4">
+                <label class="block text-gray-700">Name</label>
+                <input 
+                    type="text" 
+                    id="name" 
+                    class="w-full p-2 border border-gray-300 rounded-lg mt-1"
+                    placeholder="Enter your name"
+                />
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-gray-700">Event Name</label>
+                <input 
+                    type="text" 
+                    id="event-name" 
+                    class="w-full p-2 border border-gray-300 rounded-lg mt-1"
+                    placeholder="Enter event name"
+                />
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-gray-700">From Date</label>
+                <input 
+                    type="date" 
+                    id="from-date" 
+                    class="w-full p-2 border border-gray-300 rounded-lg mt-1"
+                />
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-gray-700">To Date</label>
+                <input 
+                    type="date" 
+                    id="to-date" 
+                    class="w-full p-2 border border-gray-300 rounded-lg mt-1"
+                />
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-gray-700">Maximum Slot Time (hours)</label>
+                <input 
+                    type="number" 
+                    id="max-slot-time" 
+                    class="w-full p-2 border border-gray-300 rounded-lg mt-1"
+                    placeholder="Enter max slot time"
+                />
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-gray-700">Maximum Number of People</label>
+                <input 
+                    type="number" 
+                    id="max-people" 
+                    class="w-full p-2 border border-gray-300 rounded-lg mt-1"
+                    placeholder="Enter max number of people"
+                />
+            </div>
+
+            <button 
+                type="button" 
+                id="generate-code-btn"
+                class="w-full bg-[#E85A4F] text-white p-3 rounded-lg hover:bg-[#E98074] transition duration-300"
+            >
+                Generate Code
+            </button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('generate-code-btn').addEventListener('click', async function() {
+            const name = document.getElementById('name').value;
+            const eventName = document.getElementById('event-name').value;
+            const fromDate = document.getElementById('from-date').value;
+            const toDate = document.getElementById('to-date').value;
+            const maxSlotTime = document.getElementById('max-slot-time').value;
+            const maxPeople = document.getElementById('max-people').value;
+
+            const errorMessageElement = document.getElementById('error-message');
+            errorMessageElement.textContent = ''; // Clear previous error messages
+
+            try {
+                const response = await fetch('http://127.0.0.1:8000/api/generate_code/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name,
+                        event_name: eventName,
+                        from_date: fromDate,
+                        to_date: toDate,
+                        max_slot_time: maxSlotTime,
+                        max_people: maxPeople,
+                    }),
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    // You could redirect or handle the response here
+                    alert(`Code generated: ${data.code}`);
+                } else {
+                    errorMessageElement.textContent = 'Failed to generate code.';
+                }
+            } catch (error) {
+                errorMessageElement.textContent = 'An error occurred while generating the code.';
+                console.error(error);  // Log error for debugging
+            }
+        });
+    </script>
+
+</body>
+</html>
