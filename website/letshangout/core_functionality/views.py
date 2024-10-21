@@ -1,23 +1,8 @@
-from django.shortcuts import render,redirect
-from .models import HangoutCode, UserData, TimeInterval
-from datetime import timedelta
-import random
+from django.shortcuts import render
 
-chars=[chr(x) for x in range (65,91)]
-nums=[chr(x) for x in range (48,58)]
-
-def generategeneric():
-    return random.choice(chars)+random.choice(chars)+random.choice(nums)+random.choice(nums)+random.choice(chars)+random.choice(chars)
-
-def generateHangoutCode():
-    code=generategeneric()
-    while len(HangoutCode.objects.filter(code=code))>0:
-        code=generategeneric()
-    return code
-
-def calendar(request):
+def calender(request):
     context={}
-    return render(request,"calender.html",context)
+    return render(request,"calendar.html",context)
 
 def confirmation(request):
     context={}
