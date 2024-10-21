@@ -1,8 +1,22 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
+from .models import HangoutCode,UserData,TimeInterval
+import random
 
-def calender(request):
+chars=[chr(x) for x in range (65,91)]
+nums=[chr(x) for x in range (48,58)]
+
+def generategeneric():
+    return random.choice(chars)+random.choice(chars)+random.choice(nums)+random.choice(nums)+random.choice(chars)+random.choice(chars)
+
+def generateHangoutCode():
+    code=generategeneric()
+    while len(HangoutCode.objects.filter(code=code))>0:
+        code=generategeneric()
+    return code
+
+def calendar(request,code):
     context={}
-    return render(request,"calender.html",context)
+    return render(request,"calendar.html",context)
 
 def confirmation(request):
     context={}
@@ -22,4 +36,12 @@ def howtouse(request):
 
 def newcode(request):
     context={}
+    if request.method=="POST":
+        code = generateHangoutCode()
+        event_name = request.POST['eventname']
+        from_date = request.POST['fromdate']
+        to_date = request.POST['todate']
+        max_slot_time = request.POST['maxslottime']
+        HangoutCode.objects.create(code=code,event_name=event_name,from_date=from_date,to_date=to_date,max_slot_time=max_slot_time)
+        return redirect(f"/calendar/{code}")
     return render(request,"newcode.html",context)

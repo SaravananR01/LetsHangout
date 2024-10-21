@@ -19,17 +19,8 @@
 
         <p id="error-message" class="error"></p>
 
-        <form id="code-form">
-            <div class="mb-4">
-                <label class="block text-gray-700">Name</label>
-                <input 
-                    type="text" 
-                    id="name" 
-                    class="w-full p-2 border border-gray-300 rounded-lg mt-1"
-                    placeholder="Enter your name"
-                />
-            </div>
-
+        <form id="code-form" method="POST" action="#">
+            {% csrf_token %}
             <div class="mb-4">
                 <label class="block text-gray-700">Event Name</label>
                 <input 
@@ -37,6 +28,8 @@
                     id="event-name" 
                     class="w-full p-2 border border-gray-300 rounded-lg mt-1"
                     placeholder="Enter event name"
+                    name="eventname"
+                    required
                 />
             </div>
 
@@ -46,6 +39,8 @@
                     type="date" 
                     id="from-date" 
                     class="w-full p-2 border border-gray-300 rounded-lg mt-1"
+                    name="fromdate"
+                    required
                 />
             </div>
 
@@ -55,31 +50,33 @@
                     type="date" 
                     id="to-date" 
                     class="w-full p-2 border border-gray-300 rounded-lg mt-1"
+                    name="todate"
+                    required
                 />
             </div>
 
             <div class="mb-4">
                 <label class="block text-gray-700">Maximum Slot Time (hours)</label>
-                <input 
-                    type="number" 
+                <select 
+                    type="list" 
                     id="max-slot-time" 
                     class="w-full p-2 border border-gray-300 rounded-lg mt-1"
                     placeholder="Enter max slot time"
-                />
+                    name="maxslottime"
+                    list="slots"
+                    required
+                >
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="6">6</option>
+                    <option value="8">8</option>
+                </select>
             </div>
 
-            <div class="mb-4">
-                <label class="block text-gray-700">Maximum Number of People</label>
-                <input 
-                    type="number" 
-                    id="max-people" 
-                    class="w-full p-2 border border-gray-300 rounded-lg mt-1"
-                    placeholder="Enter max number of people"
-                />
-            </div>
 
             <button 
-                type="button" 
+                type="submit" 
                 id="generate-code-btn"
                 class="w-full bg-[#E85A4F] text-white p-3 rounded-lg hover:bg-[#E98074] transition duration-300"
             >
@@ -88,47 +85,6 @@
         </form>
     </div>
 
-    <script>
-        document.getElementById('generate-code-btn').addEventListener('click', async function() {
-            const name = document.getElementById('name').value;
-            const eventName = document.getElementById('event-name').value;
-            const fromDate = document.getElementById('from-date').value;
-            const toDate = document.getElementById('to-date').value;
-            const maxSlotTime = document.getElementById('max-slot-time').value;
-            const maxPeople = document.getElementById('max-people').value;
-
-            const errorMessageElement = document.getElementById('error-message');
-            errorMessageElement.textContent = ''; // Clear previous error messages
-
-            try {
-                const response = await fetch('http://127.0.0.1:8000/api/generate_code/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        name,
-                        event_name: eventName,
-                        from_date: fromDate,
-                        to_date: toDate,
-                        max_slot_time: maxSlotTime,
-                        max_people: maxPeople,
-                    }),
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    // You could redirect or handle the response here
-                    alert(`Code generated: ${data.code}`);
-                } else {
-                    errorMessageElement.textContent = 'Failed to generate code.';
-                }
-            } catch (error) {
-                errorMessageElement.textContent = 'An error occurred while generating the code.';
-                console.error(error);  // Log error for debugging
-            }
-        });
-    </script>
 
 </body>
 </html>
