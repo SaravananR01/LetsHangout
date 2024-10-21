@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate New Code</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .error {
+            color: red;
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <div class="max-w-md mx-auto mt-10 p-4 bg-white shadow-md rounded-lg mb-4">
+        <h2 class="text-2xl font-bold text-center text-gray-800 mb-4">Generate New Code</h2>
+
+        <p id="error-message" class="error"></p>
+
+        <form id="code-form" method="POST" action="#">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label class="block text-gray-700">Event Name</label>
+                <input 
+                    type="text" 
+                    id="event-name" 
+                    class="w-full p-2 border border-gray-300 rounded-lg mt-1"
+                    placeholder="Enter event name"
+                    name="eventname"
+                    required
+                />
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-gray-700">From Date</label>
+                <input 
+                    type="date" 
+                    id="from-date" 
+                    class="w-full p-2 border border-gray-300 rounded-lg mt-1"
+                    name="fromdate"
+                    required
+                />
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-gray-700">To Date</label>
+                <input 
+                    type="date" 
+                    id="to-date" 
+                    class="w-full p-2 border border-gray-300 rounded-lg mt-1"
+                    name="todate"
+                    required
+                />
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-gray-700">Maximum Slot Time (hours)</label>
+                <select 
+                    type="list" 
+                    id="max-slot-time" 
+                    class="w-full p-2 border border-gray-300 rounded-lg mt-1"
+                    placeholder="Enter max slot time"
+                    name="maxslottime"
+                    list="slots"
+                    required
+                >
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="6">6</option>
+                    <option value="8">8</option>
+                </select>
+            </div>
+
+
+            <button 
+                type="submit" 
+                id="generate-code-btn"
+                class="w-full bg-[#E85A4F] text-white p-3 rounded-lg hover:bg-[#E98074] transition duration-300"
+            >
+                Generate Code
+            </button>
+        </form>
+    </div>
+
+
+</body>
+</html>

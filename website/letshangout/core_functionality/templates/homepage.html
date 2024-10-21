@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Let's Hangout</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .animate-typing {
+            overflow: hidden;
+            white-space: nowrap;
+            width: 0;
+            animation: typing 3s steps(30, end) forwards;
+        }
+
+        @keyframes typing {
+            from {
+                width: 0;
+            }
+            to {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Hero Section -->
+    <section class="py-5 max-w-[1240px] px-4 mx-auto">
+        <div class="container flex flex-wrap items-center justify-center mx-auto mt-10 md:px-12 md:flex-row">
+            <div class="mb-14 lg:mb-0 lg:w-1/2">
+                <h1 class="animate-typing max-w-xl text-[2.9rem] leading-none font-extrabold font-sans text-center text-[#E85A4F] lg:text-6xl lg:text-left lg:leading-tight mb-5">Let's Hangout</h1>
+                <p class="text-[#E98074] max-w-xl text-center lg:text-left lg:max-w-md">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis neque lorem, posuere in placerat non, rhoncus in felis. Etiam ac risus eu augue lacinia eleifend. Nam et tortor nec orci tempus tempor. Maecenas vel enim nunc. Praesent augue turpis, lacinia quis odio non, consequat convallis lacus.
+                </p>
+                <div class="flex justify-center mt-14 lg:justify-start">
+                    <a href="/newcode">
+                        <button type="button" class="text-[#fff] bg-[#8E8D8A] font-medium rounded-lg px-5 py-4 text-center hover:bg-white hover:text-[#8E8D8A] hover:drop-shadow-md transition duration-300 ease-in-out mx-2">New Code</button>
+                    </a>
+                    <a href="/entercode">
+                        <button type="button" class="text-[#fff] bg-[#E85A4F] font-medium rounded-lg px-5 py-4 text-center hover:bg-white hover:text-[#8E8D8A] hover:drop-shadow-md transition duration-300 ease-in-out mx-2">Enter Code</button>
+                    </a>
+                </div>
+            </div>
+            <div class="lg:w-1/2">
+                <img class="ml-auto" src="assets/phone.png" alt="phone"/>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-24 bg-white">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="mb-14 text-center">
+                <span class="py-1 px-4 bg-indigo-100 rounded-full text-xs font-medium text-indigo-600 text-center">Features</span>
+                <h2 class="text-4xl text-center font-bold text-gray-900 py-5">Revolutionary Features</h2>
+                <p class="text-lg font-normal text-gray-500 max-w-md md:max-w-2xl mx-auto">
+                    Provides advanced features like time tracking, integrating with third party apps (Calendar / Google drive), creating subtasks.
+                </p>
+            </div>
+            <div class="flex justify-center items-center gap-x-5 gap-y-8 lg:gap-y-0 flex-wrap md:flex-wrap lg:flex-nowrap lg:flex-row lg:justify-between lg:gap-x-8">
+                <div class="relative w-full text-center max-md:max-w-sm max-md:mx-auto group md:w-2/5 lg:w-1/4">
+                    <div class="bg-indigo-50 rounded-lg flex justify-center items-center mb-5 w-20 h-20 mx-auto cursor-pointer transition-all duration-500 group-hover:bg-indigo-600">
+                        <svg class="stroke-indigo-600 transition-all duration-500 group-hover:stroke-white" width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M10 27.5L15 25M15 25V21.25M15 25L20 27.5M8.75 14.375L12.5998 11.0064C13.1943 10.4862 14.1163 10.6411 14.5083 11.327L15.4917 13.048C15.8837 13.7339 16.8057 13.8888 17.4002 13.3686L21.25 10M2.5 2.5H27.5M26.25 2.5V13.25C26.25 17.0212 26.25 18.9069 25.0784 20.0784C23.9069 21.25 22.0212 21.25 18.25 21.25H11.75C7.97876 21.25 6.09315 21.25 4.92157 20.0784C3.75 18.9069 3.75 17.0212 3.75 13.25V2.5"></path>
+                        </svg>
+                    </div>
+                    <h4 class="text-lg font-medium text-gray-900 mb-3 capitalize">Integration with Calendar Apps</h4>
+                    <p class="text-sm font-normal text-gray-500">
+                        Allows users to sync their schedules with popular calendar apps (like Google Calendar, Outlook, or Apple Calendar) to automatically import their availability and add scheduled events to their personal calendars.
+                    </p>
+                </div>
+                <div class="relative w-full text-center max-md:max-w-sm max-md:mx-auto group md:w-2/5 lg:w-1/4">
+                    <div class="bg-pink-50 rounded-lg flex justify-center items-center mb-5 w-20 h-20 mx-auto cursor-pointer transition-all duration-500 group-hover:bg-pink-600">
+                        <svg class="stroke-pink-600 transition-all duration-500 group-hover:stroke-white" width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M2.5 7.5C2.5 4.73858 4.73858 2.5 7.5 2.5C10.2614 2.5 12.5 4.73858 12.5 7.5C12.5 10.2614 10.2614 12.5 7.5 12.5C4.73858 12.5 2.5 10.2614 2.5 7.5Z" stroke="" stroke-width="2"></path>
+                            <path d="M2.5 22.5C2.5 20.143 2.5 18.9645 3.23223 18.2322C3.96447 17.5 5.14298 17.5 7.5 17.5C9.85702 17.5 11.0355 17.5 11.7678 18.2322C12.5 18.9645 12.5 20.143 12.5 22.5C12.5 24.857 12.5 26.0355 11.7678 26.7678C11.0355 27.5 9.85702 27.5 7.5 27.5C5.14298 27.5 3.96447 27.5 3.23223 26.7678C2.5 26.0355 2.5 24.857 2.5 22.5Z" stroke="" stroke-width="2"></path>
+                            <path d="M17.5 7.5C17.5 5.14298 17.5 3.96447 18.2322 3.23223C18.9645 2.5 20.143 2.5 22.5 2.5C24.857 2.5 26.0355 2.5 26.7678 3.23223C27.5 3.96447 27.5 5.14298 27.5 7.5C27.5 9.85702 27.5 11.0355 26.7678 11.7678C26.0355 12.5 24.857 12.5 22.5 12.5C20.143 12.5 18.9645 12.5 18.2322 11.7678C17.5 11.0355 17.5 9.85702 17.5 7.5Z" stroke="" stroke-width="2"></path>
+                            <path d="M17.5 22.5C17.5 20.143 17.5 18.9645 18.2322 18.2322C18.9645 17.5 20.143 17.5 22.5 17.5C24.857 17.5 26.0355 17.5 26.7678 18.2322C27.5 18.9645 27.5 20.143 27.5 22.5C27.5 24.857 27.5 26.0355 26.7678 26.7678C26.0355 27.5 24.857 27.5 22.5 27.5C20.143 27.5 18.9645 27.5 18.2322 26.7678C17.5 26.0355 17.5 24.857 17.5 22.5Z" stroke="" stroke-width="2"></path>
+                        </svg>
+                    </div>
+                    <h4 class="text-lg font-medium text-gray-900 mb-3 capitalize">Creating Subtasks</h4>
+                    <p class="text-sm font-normal text-gray-500">
+                        Allows users to create subtasks within a task, making it easier to break down larger tasks into smaller, manageable pieces.
+                    </p>
+                </div>
+                <div class="relative w-full text-center max-md:max-w-sm max-md:mx-auto group md:w-2/5 lg:w-1/4">
+                    <div class="bg-blue-50 rounded-lg flex justify-center items-center mb-5 w-20 h-20 mx-auto cursor-pointer transition-all duration-500 group-hover:bg-blue-600">
+                        <svg class="stroke-blue-600 transition-all duration-500 group-hover:stroke-white" width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 15H27M3 15V22M3 15V8M27 15V22M27 15V8" stroke="" stroke-width="2"></path>
+                        </svg>
+                    </div>
+                    <h4 class="text-lg font-medium text-gray-900 mb-3 capitalize">Advanced Time Tracking</h4>
+                    <p class="text-sm font-normal text-gray-500">
+                        Time tracking features that allow users to monitor how much time is spent on each task, providing insights into productivity and time management.
+                    </p>
+                </div>
+                <div class="relative w-full text-center max-md:max-w-sm max-md:mx-auto group md:w-2/5 lg:w-1/4">
+                    <div class="bg-green-50 rounded-lg flex justify-center items-center mb-5 w-20 h-20 mx-auto cursor-pointer transition-all duration-500 group-hover:bg-green-600">
+                        <svg class="stroke-green-600 transition-all duration-500 group-hover:stroke-white" width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 7.5H27M3 7.5V8M3 7.5V5M27 7.5V8M27 7.5V5" stroke="" stroke-width="2"></path>
+                        </svg>
+                    </div>
+                    <h4 class="text-lg font-medium text-gray-900 mb-3 capitalize">Cloud Integration</h4>
+                    <p class="text-sm font-normal text-gray-500">
+                        Seamless integration with cloud services for file storage and management, allowing easy access and sharing of files across devices.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>

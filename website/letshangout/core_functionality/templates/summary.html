@@ -1,0 +1,29 @@
+<!-- user_availabilities.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Availabilities</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto mt-8">
+        <h1 class="text-4xl font-bold text-center text-[#E85A4F] mb-8">User Availabilities</h1>
+        
+        {% if availabilities %}
+            <div class="grid grid-cols-3 gap-6">
+                {% for availability in availabilities %}
+                <div class="border-2 border-[#E98074] rounded-lg p-4 bg-white">
+                    <h2 class="text-2xl font-bold text-[#E85A4F]">{{ availability.user.name }}</h2>
+                    <p class="mt-2"><span class="font-semibold">Day:</span> {{ availability.day }}</p>
+                    <p class="mt-2"><span class="font-semibold">Time Slot:</span> {{ availability.time_slot }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-center text-xl">No users have entered their availability for this code.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
