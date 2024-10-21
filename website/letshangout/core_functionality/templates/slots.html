@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Time Slots</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+    <div class="max-w-4xl mx-auto p-4 bg-white shadow-md rounded-lg my-6">
+        <h2 class="text-2xl font-bold mb-4">Select Time Slots for {{ event.event_name }} on {{ selected_date }}</h2>
+        
+        <form method="POST" action="{% url 'save_slots' selected_date %}">
+            {% csrf_token %}
+            <input type="hidden" name="username" value="{{ username }}">
+            
+            <h3 class="text-lg mb-2">Available Time Slots:</h3>
+            <div class="space-y-2">
+                {% for slot in time_slots %}
+                    <div>
+                        <input type="checkbox" id="slot_{{ forloop.counter }}" name="selected_times" value="{{ slot }}">
+                        <label for="slot_{{ forloop.counter }}">{{ slot }}</label>
+                    </div>
+                {% endfor %}
+            </div>
+            
+            <button type="submit" class="mt-4 bg-blue-500 text-white py-2 px-4 rounded">Save Selected Slots</button>
+        </form>
+    </div>
+
+</body>
+</html>

@@ -17,7 +17,7 @@ class UserData(models.Model):
 
 
     def __str__(self):
-        return self.code
+        return self.user_code
     
 class TimeInterval(models.Model):
     tid=models.CharField(max_length=255,primary_key=True)

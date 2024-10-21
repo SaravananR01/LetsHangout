@@ -3,53 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ event.event_name }} Calendar</title>
+    <title>Calendar</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        function showCalendar() {
+            const nameInput = document.getElementById('nameInput').value.trim();
+            const calendarContainer = document.getElementById('calendarContainer');
+            const errorMessage = document.getElementById('errorMessage');
+            const lockInButton = document.getElementById('lockInButton');
+
+            if (nameInput) {
+                calendarContainer.style.display = 'block';
+                errorMessage.style.display = 'none';
+                lockInButton.style.display = 'block'; // Show the Lock In button
+            } else {
+                errorMessage.style.display = 'block';
+                calendarContainer.style.display = 'none';
+                lockInButton.style.display = 'none'; // Hide the Lock In button
+            }
+        }
+
+        function lockInUser() {
+            const nameInput = document.getElementById('nameInput').value.trim();
+            const code = '{{ event.code }}'; // Assuming `event.code` is accessible here
+
+            // Create a form to submit the data
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '{% url "save_user_data" %}'; // Adjust URL as necessary
+
+            // Create hidden fields for data
+            const usernameField = document.createElement('input');
+            usernameField.type = 'hidden';
+            usernameField.name = 'username';
+            usernameField.value = nameInput;
+
+            const codeField = document.createElement('input');
+            codeField.type = 'hidden';
+            codeField.name = 'code';
+            codeField.value = code;
+
+            // Append fields to form
+            form.appendChild(usernameField);
+            form.appendChild(codeField);
+
+            // Add CSRF token
+            const csrfToken = '{{ csrf_token }}'; // Assuming you are passing CSRF token in your template context
+            const csrfField = document.createElement('input');
+            csrfField.type = 'hidden';
+            csrfField.name = 'csrfmiddlewaretoken';
+            csrfField.value = csrfToken;
+            form.appendChild(csrfField);
+
+            // Append form to body and submit
+            document.body.appendChild(form);
+            form.submit();
+        }
+    </script>
 </head>
 <body class="bg-gray-100">
-    <div class="m-5">
-        <!-- Top bar with code on the left and input on the right -->
-        <div class="flex justify-between items-center mb-4">
-            <!-- Event Code on the Left -->
-            <div class="text-[#E85A4F] text-2xl font-bold">
-                Code: {{ event.code }}
-            </div>
-            
-            <!-- Input field on the Right -->
-            <div class="w-1/3">
-                <input type="text" placeholder="Enter something..." class="w-full p-2 border-2 border-[#E85A4F] rounded focus:outline-none focus:ring-2 focus:ring-[#E85A4F]">
-            </div>
+
+    <div class="flex justify-between items-center p-4 bg-white shadow-md mb-6">
+        <div>
+            <h2 class="text-xl font-bold">Event Code: {{ event.code }}</h2>
+            <h3 class="text-lg">Event Name: {{ event.event_name }}</h3>
+            <h3 class="text-md">Date Range: {{ event.from_date }} to {{ event.to_date }}</h3>
         </div>
-
-        <!-- Event Title -->
-        <h1 class="text-[#E98074] text-4xl font-bold mb-4">{{ event.event_name }} Calendar</h1>
-
-        <!-- Date Headers -->
-        <div class="grid grid-cols-7 gap-4">
-            {% for date in dates %}
-                <div class="border-4 border-[#E85A4F] p-5 bg-[#E98074] text-white text-center">
-                    {{ date }}
-                </div>
-            {% endfor %}
-        </div>
-
-        <!-- User Availability -->
-        <div class="mt-5">
-            {% for user in user_intervals %}
-                <h2 class="text-2xl font-bold text-[#E85A4F] mt-4">{{ user.name }}</h2>
-                <div class="grid grid-cols-7 gap-4">
-                    {% for date in dates %}
-                        <div class="border-2 p-5 text-center">
-                            {% for interval in user.intervals %}
-                                {% if interval.start|date:"Y-m-d" == date|date:"Y-m-d" %}
-                                    <p>{{ interval.start }} - {{ interval.end }}</p>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endfor %}
+        
+        <div>
+            <h2>Please Enter Your Name</h2>
+            <input type="text" id="nameInput" placeholder="Enter your name..." class="border border-gray-300 p-2 rounded-lg" oninput="showCalendar()">
+            <p id="errorMessage" class="text-red-500 hidden">Please enter your name to see the calendar.</p>
+            <button id="lockInButton" class="mt-2 bg-blue-500 text-white py-2 px-4 rounded hidden" onclick="lockInUser()">Lock In</button>
         </div>
     </div>
+
+    <!-- Calendar Section -->
+    <div id="calendarContainer" class="max-w-6xl mx-auto p-4 bg-white shadow-md rounded-lg my-6" style="display: none;">
+        <h2 class="text-2xl font-bold text-center mb-4">Calendar</h2>
+
+        <!-- Calendar Table -->
+        <table class="table-auto w-full text-center">
+            <thead>
+                <tr>
+                    <th>Mon</th>
+                    <th>Tue</th>
+                    <th>Wed</th>
+                    <th>Thu</th>
+                    <th>Fri</th>
+                    <th>Sat</th>
+                    <th>Sun</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Iterate over each week -->
+                {% for week in weeks %}
+                <tr>
+                    <!-- Iterate over each day in the week -->
+                    {% for day in week %}
+                    <td class="py-2 border">
+                        {% if day %}
+                            {% if day >= event.from_date and day <= event.to_date %}
+                                <a href="#" onclick="navigateToSelectSlots(new Date('{{ day|date:'Y-m-d' }}'))" class="text-blue-500 hover:underline">
+                                    <span class="bg-green-200 p-1 rounded">{{ day.day }}</span>
+                                </a>
+                            {% else %}
+                                <span>{{ day.day }}</span> <!-- Just display the day without highlight -->
+                            {% endif %}
+                        {% else %}
+                            <span class="text-gray-300">--</span> <!-- Placeholder for empty cells -->
+                        {% endif %}
+                    </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
 </body>
 </html>
