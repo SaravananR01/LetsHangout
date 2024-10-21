@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Calendar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #E98074;
+        }
+        .container {
+            text-align: center;
+        }
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+        }
+        .calendar div {
+            padding: 10px;
+            border: 2px solid white;
+            background-color: #E85A4F;
+            color: white;
+            text-align: center;
+            font-size: 1.5rem;
+        }
+        .header {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: white;
+        }
+        input, button {
+            padding: 10px;
+            font-size: 1rem;
+        }
+        .days {
+            font-weight: bold;
+            background-color: #E85A4F;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 class="header">Dynamic Calendar</h1>
+    <div>
+        <label for="month">Month:</label>
+        <input type="number" id="month" min="1" max="12" value="10">
+        <label for="year">Year:</label>
+        <input type="number" id="year" value="2024">
+        <button onclick="generateCalendar()">Generate Calendar</button>
+    </div>
+
+    <div id="calendar" class="calendar"></div>
+</div>
+
+<script>
+function generateCalendar() {
+    // Get the month and year from the input
+    const month = document.getElementById('month').value;
+    const year = document.getElementById('year').value;
+
+    // Get the calendar container
+    const calendar = document.getElementById('calendar');
+    calendar.innerHTML = ''; // Clear previous calendar
+
+    // Days of the week
+    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    
+    // Add days of the week header
+    daysOfWeek.forEach(day => {
+        const dayDiv = document.createElement('div');
+        dayDiv.classList.add('days');
+        dayDiv.innerText = day;
+        calendar.appendChild(dayDiv);
+    });
+
+    // Calculate the first day of the month and number of days in the month
+    const firstDay = new Date(year, month - 1, 1).getDay(); // 0 is Sunday, 1 is Monday, etc.
+    const daysInMonth = new Date(year, month, 0).getDate(); // Number of days in the month
+
+    // Add empty divs for the days before the first day of the month
+    for (let i = 0; i < firstDay; i++) {
+        const emptyDiv = document.createElement('div');
+        calendar.appendChild(emptyDiv);
+    }
+
+    // Add divs for each day of the month
+    for (let day = 1; day <= daysInMonth; day++) {
+        const dayDiv = document.createElement('div');
+        dayDiv.innerText = day;
+        calendar.appendChild(dayDiv);
+    }
+}
+</script>
+
+</body>
+</html>
