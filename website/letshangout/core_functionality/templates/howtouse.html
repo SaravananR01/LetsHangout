@@ -1,13 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>How to Use Let's Hangout</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 text-gray-800">
+{% extends "base.html" %}
 
+{% block title %}
+How to Use "Let's Hangout"!
+{% endblock %}
+{% block body %}
+    <div class="bg-gray-100 text-gray-800">
     <div class="mb-4">
         <div class="m-11 text-white"> 
             <h1 class="p-10 font-mono bg-[#E98074] text-center text-5xl rounded-full hover:bg-[#E85A4F] hover:font-sans">
@@ -31,6 +28,5 @@
             </div>
         </div>
     </div>
-
-</body>
-</html>
+</div>
+{% endblock %}

@@ -1,18 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Let's Hangout</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+{% extends "base.html" %}
+
+{% block title %}
+Let's Hangout
+{% endblock %}
+{% block body %}
+    <!-- Hero Section -->
     <style>
         .animate-typing {
             overflow: hidden;
             white-space: nowrap;
             width: 0;
-            animation: typing 3s steps(30, end) forwards;
+            animation: typing 3s steps(30, end) infinite alternate;
         }
-
+    
         @keyframes typing {
             from {
                 width: 0;
@@ -22,10 +22,6 @@
             }
         }
     </style>
-</head>
-<body class="bg-gray-100">
-
-    <!-- Hero Section -->
     <section class="py-5 max-w-[1240px] px-4 mx-auto">
         <div class="container flex flex-wrap items-center justify-center mx-auto mt-10 md:px-12 md:flex-row">
             <div class="mb-14 lg:mb-0 lg:w-1/2">
@@ -110,5 +106,4 @@
         </div>
     </section>
 
-</body>
-</html>
+{% endblock %}
