@@ -1,10 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enter Code</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+{% extends "base.html" %}
+
+{% block title %}
+Enter Code
+{% endblock %}
+{% block body %}
     <style>
         .bg-custom-bg {
             background-color: #F9FAFB; /* Customize your background color */
@@ -12,39 +11,29 @@
         .border-custom-border {
             border-color: #EAE7DC; /* Customize your border color */
         }
+        .disabled {
+            opacity: 0.5; 
+            pointer-events: none; /* Prevent clicking */
+        }
     </style>
-</head>
-<body class="bg-custom-bg overflow-hidden">
     <div class="relative flex items-center justify-center h-[76vh]">
         <div class="bg-white p-20 w-full max-w-xl rounded-lg text-gray-900 text-center border-4 border-custom-border">
-            <p class="text-xl mb-6">Are you a new user?</p>
-            <a href="/newcode">
-                <button class="bg-blue-500 hover:bg-blue-600 text-white py-3 px-6 rounded mr-4">
-                    Yes
-                </button>
-            </a>
-            <button
-                onclick="toggleCodeSection()"
-                class="bg-red-500 hover:bg-red-600 text-white py-3 px-6 rounded"
-            >
-                No
-            </button>
-            <div id="codeSection" class="mt-8 hidden">
-                <p class="mb-4">Please enter the code:</p>
-                <input
-                    type="text"
-                    placeholder="Enter code here"
-                    class="p-3 border border-gray-300 rounded w-full"
-                />
+            <p class="text-xl mb-6">Please enter the code:</p>
+            <input
+                id="codeInput"
+                type="text"
+                placeholder="Enter code here"
+                class="p-3 border border-gray-300 rounded w-full mb-6"
+                oninput="this.value ? document.getElementById('newUserButton').classList.remove('disabled') : document.getElementById('newUserButton').classList.add('disabled'); this.value ? document.getElementById('viewSummaryButton').classList.remove('disabled') : document.getElementById('viewSummaryButton').classList.add('disabled');"
+            />
+            <div class="flex justify-center">
+                <a id="newUserButton" href="#" class="bg-blue-500 hover:bg-blue-600 text-white py-3 px-6 rounded mr-4 disabled" onclick="if(!document.getElementById('codeInput').value) { event.preventDefault(); } else { window.location.href='/calendar/' + document.getElementById('codeInput').value; }">
+                    New User
+                </a>
+                <a id="viewSummaryButton" href="#" class="bg-green-500 hover:bg-green-600 text-white py-3 px-6 rounded disabled" onclick="if(!document.getElementById('codeInput').value) { event.preventDefault(); } else { window.location.href='/summary/' + document.getElementById('codeInput').value; }">
+                    View Summary
+                </a>
             </div>
         </div>
     </div>
-
-    <script>
-        function toggleCodeSection() {
-            const codeSection = document.getElementById('codeSection');
-            codeSection.classList.toggle('hidden');
-        }
-    </script>
-</body>
-</html>
+{% endblock %}

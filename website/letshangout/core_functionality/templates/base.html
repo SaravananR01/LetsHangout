@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block title %}
+
+        {% endblock %}
+    </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <div>
+        <div class="flex justify-between items-center h-20 max-w-[1240px] px-4 mx-auto">
+            <h1 class="w-full text-3xl tracking-tight font-semibold text-[#E85A4F] font-sans cursor-pointer" onclick="window.location.href='/'">Let's Hangout</h1>
+            <ul class="hidden md:flex text-[#E98074]">
+                <li class="p-4 text-nowrap">
+                    <a href="/howtouse">How to Use</a>
+                </li>
+                <li class="p-4">About</li>
+                <li class="p-4">Contact</li>
+            </ul>
+        </div>
+        <hr class="h-px my-4 bg-[#E98074] border-0 flex justify-between items-center max-w-[1240px] mx-auto" />
+    </div>
+    {% block body %}
+
+    {% endblock %}
+    <footer class="bg-gray-800 text-white py-4">
+        <div class="container mx-auto text-center">
+            <p>Copyright © <span id="year"></span> - All rights reserved</p>
+        </div>
+    </footer>
+    <script>
+        document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>
