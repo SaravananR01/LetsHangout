@@ -8,7 +8,7 @@ class HangoutCode(models.Model):
     max_slot_time = models.PositiveIntegerField()
     
     def __str__(self):
-        return self.code
+        return self.event_name
     
 class UserData(models.Model):
     user_code=models.CharField(max_length=255,primary_key=True)
@@ -17,10 +17,12 @@ class UserData(models.Model):
 
 
     def __str__(self):
-        return self.user_code
+        return self.name
     
 class TimeInterval(models.Model):
     tid=models.CharField(max_length=255,primary_key=True)
     author=models.ForeignKey(UserData,on_delete=models.CASCADE)
-    start=models.TimeField()
-    end=models.TimeField()
+    start=models.DateTimeField()
+    end=models.DateTimeField()
+    def __str__(self):
+        return self.author.name+" "+self.tid

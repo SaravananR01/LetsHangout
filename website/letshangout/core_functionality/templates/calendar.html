@@ -4,39 +4,39 @@
 Calender
 {% endblock %}
 {% block body %}
-
-<!DOCTYPE html>
     <script>
         function showCalendar() {
-            try{
+            /*try{
                 const userexists = document.getElementById('userexists').value;
             } catch(e){
                 const userexists = "";
-            }
+            }*/
             
             
             const nameInput = document.getElementById('nameInput').value.trim();
-            const calendarContainer = document.getElementById('calendarContainer');
+            //const calendarContainer = document.getElementById('calendarContainer');
             const errorMessage = document.getElementById('errorMessage');
             const lockInButton = document.getElementById('lockInButton');
-            if (userexists){
+            /*if (userexists){
+                console.log(userexists);
                 errorMessage.style.display = 'none';
                 lockInButton.style.display = 'block';
                 calendarContainer.style.display = 'block';
-            }
+            }*/
+            console.log(nameInput);
             if (nameInput) {
                 //calendarContainer.style.display = 'block';
                 errorMessage.style.display = 'none';
                 lockInButton.style.display = 'block'; // Show the Lock In button
             } else {
                 errorMessage.style.display = 'block';
-                calendarContainer.style.display = 'none';
+                //calendarContainer.style.display = 'none';
                 lockInButton.style.display = 'none'; // Hide the Lock In button
             }
         }
 
         function lockInUser() {
-            calendarContainer.style.display = 'block';
+            //calendarContainer.style.display = 'block';
             const nameInput = document.getElementById('nameInput').value.trim();
             const code = '{{ event.code }}'; // Assuming `event.code` is accessible here
 
@@ -72,29 +72,33 @@ Calender
             document.body.appendChild(form);
             form.submit();
         }
-        showCalendar();
     </script>
 
 
-
-    <div class="flex justify-between items-center p-4 bg-white shadow-md mb-6">
+    <div class="flex justify-between items-center p-4 bg-white shadow-md mb-6 max-w-6xl mx-auto">
         <div>
             <h2 class="text-xl font-bold">Event Code: {{ event.code }}</h2>
             <h3 class="text-lg">Event Name: {{ event.event_name }}</h3>
             <h3 class="text-md">Date Range: {{ event.from_date }} to {{ event.to_date }}</h3>
         </div>
-        
+        {% if not userexists %}
         <div>
             <h2>Please Enter Your Name</h2>
-            <input type="text" id="nameInput" placeholder="Enter your name..." class="border border-gray-300 p-2 rounded-lg" value="{{ userexists }}"  oninput="showCalendar()">
+            <input type="text" id="nameInput" placeholder="Enter your name..." class="border border-gray-300 p-2 rounded-lg" oninput="showCalendar()">
             <p id="errorMessage" class="text-red-500 hidden">Please enter your name to see the calendar.</p>
             <button id="lockInButton" class="mt-2 bg-blue-500 text-white py-2 px-4 rounded hidden" onclick="lockInUser()">Lock In</button>
-            <input type="text" id ="userexists" name="userexists" hidden value={{ userexists }}>
+            <!--<input type="text" id ="userexists" name="userexists" hidden value={{ userexists }}>-->
         </div>
+        {% else %}
+        <div>
+            <input type="text" id="nameInput" value="{{ userexists }}" class="border border-gray-300 p-2 rounded-lg" disabled>
+        </div>
+        {% endif %}
     </div>
-
+    
+    {% if userexists %}
     <!-- Calendar Section -->
-    <div id="calendarContainer" class="max-w-6xl mx-auto p-4 bg-white shadow-md rounded-lg my-6" style="display: none;">
+    <div id="calendarContainer" class="max-w-6xl mx-auto p-4 bg-white shadow-md rounded-lg my-6">
         <h2 class="text-2xl font-bold text-center mb-4">Calendar</h2>
 
         <!-- Calendar Table -->
@@ -119,9 +123,9 @@ Calender
                     <td class="py-2 border">
                         {% if day %}
                             {% if day >= event.from_date and day <= event.to_date %}
-                                <a href="#" onclick="navigateToSelectSlots(new Date('{{ day|date:'Y-m-d' }}'))" class="text-blue-500 hover:underline">
-                                    <span class="bg-green-200 p-1 rounded">{{ day.day }}</span>
-                                </a>
+                            <a href="/select-slots/{{ day|date:'Y-m-d' }}/{{ event.code }}" class="text-blue-500 hover:underline">
+                                <span class="bg-green-200 p-1 rounded">{{ day.day }}</span>
+                            </a>
                             {% else %}
                                 <span>{{ day.day }}</span> <!-- Just display the day without highlight -->
                             {% endif %}
@@ -135,4 +139,5 @@ Calender
             </tbody>
         </table>
     </div>
+    {% endif %}
 {% endblock %}

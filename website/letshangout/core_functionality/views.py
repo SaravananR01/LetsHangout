@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from .models import HangoutCode,UserData,TimeInterval
 import random
-from datetime import timedelta,datetime
+from datetime import timedelta,datetime,time
 from django.utils import timezone
 
 chars=[chr(x) for x in range (65,91)]
@@ -19,6 +19,12 @@ def generateHangoutCode():
 def generateUserCode():
     code=generategeneric()
     while len(UserData.objects.filter(user_code=code))>0:
+        code=generategeneric()
+    return code
+
+def generateTimeCode():
+    code=generategeneric()
+    while len(TimeInterval.objects.filter(tid=code))>0:
         code=generategeneric()
     return code
 
@@ -86,7 +92,6 @@ def calendar(request,code):
         'username': request.POST.get('username', ''),
     }
     if 'user' in request.session:
-        print(request.session['user'])
         context['userexists']=request.session['user']
     return render(request, 'calendar.html', context)
 
@@ -99,8 +104,8 @@ def generate_time_slots(max_slot_time):
             slots.append(f"{start_time} - {end_time}")
     return slots
 
-def confirmation(request):
-    context={}
+def confirmation(request,code):
+    context={'user_name':request.session['user'],"unique_code":code}
     return render(request,"confirmation.html",context)
 
 def entercode(request):
@@ -109,15 +114,105 @@ def entercode(request):
 
 def home(request):
     context={}
+    if ('user' in request.session):
+        del request.session['user']
+        request.session.modified=True
     return render(request,"homepage.html",context)
 
 def howtouse(request):
     context={}
     return render(request,"howtouse.html",context)
 
-def summary(request,code):
-    context={}
-    return render(request,"summary.html",context)
+def summary(request, code):
+    context = {}
+    event = HangoutCode.objects.get(code=code)
+    context['event_name'] = event.event_name
+    context['code'] = event.code
+
+    # Get all users related to the specified HangoutCode
+    users = UserData.objects.filter(event=event)
+
+    # List to hold merged intervals for each user
+    user_merged_intervals = []
+    user_merged_intervals_dict={}
+    # Gather free intervals for each user and merge them
+    for user in users:
+        user_intervals = TimeInterval.objects.filter(author=user).order_by('start')
+
+        # List to hold this user's intervals
+        user_intervals_list = [(interval.start, interval.end) for interval in user_intervals]
+
+        # Merge the user's intervals
+        merged_user_intervals = merge_intervals(user_intervals_list)
+
+        # Append the merged intervals for this user
+        user_merged_intervals.append(merged_user_intervals)
+        user_merged_intervals_dict[user.name]=merged_user_intervals
+    # Now find common free slots across all users
+    common_free_slots = find_common_slots(user_merged_intervals)
+    context['free'] = common_free_slots
+    context['userslots']=user_merged_intervals_dict
+    return render(request, "summary.html", context)
+
+
+
+def merge_intervals(intervals):
+    """ Merge overlapping and contiguous intervals for a single user. """
+    if not intervals:
+        return []
+
+    # Convert end time of 00:00 to 23:59 for merging purposes
+    for i in range(len(intervals)):
+        if intervals[i][1].time() == time(0, 0):  # Check for end time 00:00
+            intervals[i] = (intervals[i][0], datetime.combine(intervals[i][1].date(), time(23, 59), tzinfo=intervals[i][1].tzinfo))
+
+    # Sort intervals by start time
+    intervals.sort(key=lambda x: x[0])
+
+    merged = []
+    current_start, current_end = intervals[0]
+
+    for start, end in intervals[1:]:
+        # Check if the current interval overlaps with or is contiguous with the next one
+        if start <= current_end or (current_end.time() == time(23, 59) and start.time() == time(0, 0)):
+            current_end = max(current_end, end)  # Merge them
+        else:
+            merged.append((current_start, current_end))  # No overlap
+            current_start, current_end = start, end  # Move to next interval
+
+    # Don't forget to add the last interval
+    merged.append((current_start, current_end))
+    return merged
+
+
+
+
+
+def find_common_slots(user_merged_intervals):
+    """ Find common free slots across all users. """
+    if not user_merged_intervals:
+        return []
+
+    # Start with the first user's merged intervals
+    common_slots = user_merged_intervals[0]
+
+    # Compare with the merged intervals of other users
+    for user_slots in user_merged_intervals[1:]:
+        new_common_slots = []
+        for start, end in common_slots:
+            for user_start, user_end in user_slots:
+                # Find the overlap
+                overlap_start = max(start, user_start)
+                overlap_end = min(end, user_end)
+
+                # If there's an overlap, add it to the new common slots
+                if overlap_start < overlap_end:  # There is an overlap
+                    new_common_slots.append((overlap_start, overlap_end))
+
+        common_slots = new_common_slots
+
+    return common_slots
+
 
 def newcode(request):
     context={}
@@ -134,75 +229,59 @@ def newcode(request):
 # def generate_calendar(request, code):
    
 
-def select_slots(request, selected_date, username):
-    code = request.GET.get('code')
-    
-    # Validate if the code exists
+def select_slots(request, selected_date,code):
     try:
         event = HangoutCode.objects.get(code=code)
     except HangoutCode.DoesNotExist:
-        return render(request, 'error.html', {'message': 'Event not found'})
-
+        return redirect("/")
+    username=request.session['user']
     # Fetch user intervals for the selected date
     year,month,day=map(int,selected_date.split('-'))
     max_slot_time=HangoutCode.objects.get(code=code).max_slot_time
-    date_object=datetime(year,month,day)
     time_slots=generate_time_slots(max_slot_time)
-    user_intervals = TimeInterval.objects.filter(
-        author=username, # Change this to match your model's field
-    )
+    #user_intervals = TimeInterval.objects.filter(
+    #    author=username, 
+    #)
 
     # Render the template with the selected date and user intervals
     return render(request, 'slots.html', {
         'selected_date': selected_date,
         'username': username,
         'event': event,
-        'user_intervals': user_intervals,
+        #'user_intervals': user_intervals,
         'max_slot_time':max_slot_time,
         'time_slots':time_slots,
+        'code':code,
     })
 
 
-def save_slots(request, selected_date):
+def save_slots(request, selected_date,code):
     if request.method == 'POST':
+        try:
+            event = HangoutCode.objects.get(code=code)
+        except HangoutCode.DoesNotExist:
+            return redirect("/")
         username = request.POST.get('username')
         selected_times = request.POST.getlist('selected_times')  # Get the list of selected times
 
         # Get the author object (UserData) based on the username
-        author = UserData.objects.get(name=username)
+        author = UserData.objects.get(name=username,event=HangoutCode.objects.get(code=code))
 
         for time in selected_times:
             # Split the time string by space instead of hyphen
-            start_time_str, end_time_str = [t.strip() for t in time.split('-')]
-        
-            # try:
-            #     # Assuming time is in HH:MM format
-            #     start_time = timezone.datetime.strptime(start_time_str, "%H:%M:%S").time()
-            #     end_time = timezone.datetime.strptime(end_time_str, "%H:%M:%S").time()
-
-            #     # Create and save TimeInterval instance
-            #     interval = TimeInterval(
-            #         tid=f"{username}_{start_time_str}",  # Generate a unique tid
-            #         author=author,
-            #         start=start_time,
-            #         end=end_time
-            #     )
-            #     interval.save()
-
-            # except ValueError as e:
-            #     return render(request, 'error.html', {'message': f'Invalid time format: {start_time_str} or {end_time_str}'})
+            start_time_str, end_time_str = [selected_date+" "+t.strip() for t in time.split('-')]
 
             interval=TimeInterval(
-                    tid=f"{username}_{start_time_str}",
+                    tid=generateTimeCode(),
                     author=author,
                     start=start_time_str,
                     end=end_time_str
             )
             interval.save()
 
-        return redirect('confirmation')  # Redirect to a confirmation page or another view
+        return redirect(f'/confirmation/{author.event.code}')  # Redirect to a confirmation page or another view
 
-    return render(request, 'error.html', {'message': 'Invalid request'})
+    return redirect("/")
 
 def save_user_data(request):
     if request.method == 'POST':
@@ -212,13 +291,17 @@ def save_user_data(request):
         try:
             event = HangoutCode.objects.get(code=code)
         except HangoutCode.DoesNotExist:
-            return render(request, 'error.html', {'message': 'Event not found'})
+            return redirect("/")
 
         # Save user data
-        user_data= UserData.objects.create(user_code=generateUserCode(),name = username,event = event)
+        if (UserData.objects.get(name = username,event = event)):
+            user_data=UserData.objects.get(name = username,event = event)
+        else:
+            user_data= UserData.objects.create(user_code=generateUserCode(),name = username,event = event)
+            user_data.save()
         request.session['user']=user_data.name
         request.session.modified=True
-        user_data.save()
+        
 
         return redirect(f"/calendar/{code}")  # Redirect to the calendar or another page
 
