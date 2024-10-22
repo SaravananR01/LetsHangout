@@ -125,7 +125,10 @@ def howtouse(request):
 
 def summary(request, code):
     context = {}
-    event = HangoutCode.objects.get(code=code)
+    try:
+        event = HangoutCode.objects.get(code=code)
+    except HangoutCode.DoesNotExist:
+        return redirect("/")
     context['event_name'] = event.event_name
     context['code'] = event.code
 
@@ -294,7 +297,7 @@ def save_user_data(request):
             return redirect("/")
 
         # Save user data
-        if (UserData.objects.get(name = username,event = event)):
+        if len(UserData.objects.filter(name = username,event = event))>1:
             user_data=UserData.objects.get(name = username,event = event)
         else:
             user_data= UserData.objects.create(user_code=generateUserCode(),name = username,event = event)
