@@ -28,6 +28,7 @@ def calendar(request,code):
     except HangoutCode.DoesNotExist:
         return redirect('/')
 
+
     users = UserData.objects.filter(event=event)
     start_date = event.from_date
     end_date = event.to_date
@@ -84,7 +85,9 @@ def calendar(request,code):
         'user_intervals': user_intervals,
         'username': request.POST.get('username', ''),
     }
-
+    if 'user' in request.session:
+        print(request.session['user'])
+        context['userexists']=request.session['user']
     return render(request, 'calendar.html', context)
 
 def generate_time_slots(max_slot_time):
@@ -213,6 +216,8 @@ def save_user_data(request):
 
         # Save user data
         user_data= UserData.objects.create(user_code=generateUserCode(),name = username,event = event)
+        request.session['user']=user_data.name
+        request.session.modified=True
         user_data.save()
 
         return redirect(f"/calendar/{code}")  # Redirect to the calendar or another page
