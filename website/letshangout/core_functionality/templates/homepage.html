@@ -1,5 +1,6 @@
-{% extends "base.html" %}
 
+{% extends "base.html" %}
+{% load static %}
 {% block title %}
 Let's Hangout
 {% endblock %}
@@ -22,12 +23,12 @@ Let's Hangout
             }
         }
     </style>
-    <section class="py-5 max-w-[1240px] px-4 mx-auto">
+    <section class="py-5 max-w-auto px-4 mx-auto h-screen">
         <div class="container flex flex-wrap items-center justify-center mx-auto mt-10 md:px-12 md:flex-row">
             <div class="mb-14 lg:mb-0 lg:w-1/2">
                 <h1 class="animate-typing max-w-xl text-[2.9rem] leading-none font-extrabold font-sans text-center text-[#E85A4F] lg:text-6xl lg:text-left lg:leading-tight mb-5">Let's Hangout</h1>
                 <p class="text-[#E98074] max-w-xl text-center lg:text-left lg:max-w-md">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis neque lorem, posuere in placerat non, rhoncus in felis. Etiam ac risus eu augue lacinia eleifend. Nam et tortor nec orci tempus tempor. Maecenas vel enim nunc. Praesent augue turpis, lacinia quis odio non, consequat convallis lacus.
+                    Ever had issues planning an event with a friend? No need to worry anymore! Let's Hangout is a website used to do collaborative planning events. Make a new code and share it with all your friends, and use your special formula to see all the free slots!
                 </p>
                 <div class="flex justify-center mt-14 lg:justify-start">
                     <a href="/newcode">
@@ -39,7 +40,7 @@ Let's Hangout
                 </div>
             </div>
             <div class="lg:w-1/2">
-                <img class="ml-auto" src="assets/phone.png" alt="phone"/>
+                <img class="ml-auto" src="{% static 'phone.png' %}" alt="phone"/>
             </div>
         </div>
     </section>

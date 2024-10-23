@@ -9,6 +9,15 @@
         {% endblock %}
     </title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        footer{
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+
+        }
+    </style>
 </head>
 <body class="bg-gray-100">
     <div>
@@ -27,13 +36,13 @@
     {% block body %}
 
     {% endblock %}
-    <footer class="bg-gray-800 text-white py-4">
+    <!--<footer class="bg-gray-800 text-white py-4">
         <div class="container mx-auto text-center">
             <p>Copyright © <span id="year"></span> - All rights reserved</p>
         </div>
     </footer>
     <script>
         document.getElementById("year").textContent = new Date().getFullYear();
-    </script>
+    </script>-->
 </body>
 </html>
